@@ -1,0 +1,8 @@
+[workspace]
+package.authors = ["Skye Benson <skyebenson@hotmail.com>"]
+members = ["crates/*"]
+resolver = "3"
+
+
+[workspace.dependencies]
+anyhow = "1.0.102"
