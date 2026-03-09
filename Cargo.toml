@@ -1,8 +1,13 @@
 [workspace]
-package.authors = ["Skye Benson <skyebenson@hotmail.com>"]
 members = ["crates/*"]
-resolver = "3"
+resolver = "2"
 
+[workspace.package]
+authors = ["Skye Benson <skyebenson@hotmail.com"]
+license = "MIT"
+edition = "2024"
 
 [workspace.dependencies]
+mini-polaris-core = { version = "0.1.0", path = "./crates/core" }
 anyhow = "1.0.102"
+rand = "0.10"
