@@ -1,10 +1,7 @@
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub mod modelling;
+pub mod storage;
+pub mod types;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+pub use modelling::model::*;
+pub use storage::*;
+pub use types::*;
