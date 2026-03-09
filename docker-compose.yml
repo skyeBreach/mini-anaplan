@@ -1,0 +1,49 @@
+services:
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - 27017:27017
+    env_file: ./.env
+    volumes:
+      - ./infra/db-config/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+    networks:
+      - portal-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mongosh",
+          "-u",
+          "$MONGO_INITDB_ROOT_USERNAME",
+          "-p",
+          "$MONGO_INITDB_ROOT_PASSWORD",
+          "--authenticationDatabase",
+          "$MONGO_INITDB_DATABASE",
+          "--eval",
+          "db.adminCommand('ping')",
+        ]
+      interval: 30s # Check every 30 seconds
+      timeout: 10s # Fail if no response in 10 seconds
+      retries: 3 # Mark unhealthy after 3 failures
+      start_period: 40s # Wait 40s before first check (startup time)
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    ports:
+      - 8081:8081
+    env_file: ./.env
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    depends_on:
+      - mongo
+    volumes:
+      - ./infra/db-config-panel/config.js:/app/config.js
+    networks:
+      - portal-network
+
+networks:
+  portal-network:
+    driver: bridge
